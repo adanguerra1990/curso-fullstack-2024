@@ -1,13 +1,13 @@
 import './App.css'
 
-const Header = (props) => {
-  console.log('header', props)
+const Header = ({course}) => {
+  console.log('header', course)
   return (
-    <p> {props.course} </p>
+    <p> {course.name} </p>
   )
 }
 
-const Part = ({part, exercises}) => {
+const Part = ({ part, exercises }) => {
   console.log('Part', part, exercises)
 
   return (
@@ -19,7 +19,7 @@ const Content = ({ parts }) => {
   console.log('Content', parts)
   return (
     <div>
-      {parts.map((part) =>{
+      {parts.map((part) => {
         console.log('Map', part);
         return <Part key={part.name} part={part.name} exercises={part.exercises} />
       })}
@@ -36,28 +36,32 @@ const Total = ({ total }) => {
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ];
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  };
 
-  const totalExercises = parts.reduce((sum, part) => sum + part.exercises, 0);
+  console.log(course)
+
+  const totalExercises = course.parts.reduce((sum, part) => sum + part.exercises, 0);
 
   return (
     <div>
       <Header course={course} />
-      <Content parts={parts} />
+      <Content parts={course.parts} />
 
       <Total total={totalExercises} />
     </div>
