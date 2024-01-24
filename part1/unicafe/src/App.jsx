@@ -22,20 +22,34 @@ function App() {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [total, setTotal] = useState(0)
 
 
   const handleGoodClick = () => {
-    setGood(good + 1)
+    const updateGood = good + 1
+    setGood(updateGood)
     console.log('good..', good)
+    const valueTotal = total + 1
+    console.log('valueTotal', valueTotal)
+    setTotal(valueTotal)
   }
   const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
+    const updateNeutral = neutral + 1
+    setNeutral(updateNeutral)
     console.log('neutral..', neutral)
+    setTotal(total + 1)
   }
   const handleBadClick = () => {
-    setBad(bad + 1)
+    const updateBad = bad + 1
+    setBad(updateBad)
     console.log('bad..', bad)
+    setTotal(total + 1)
   }
+  const calculateAverageComments = () => {
+    return ((good - bad) / total) || 0
+  }
+  const commentsPositive = (good / total) * 100 || 0
+
 
   return (
     <div>
@@ -56,6 +70,16 @@ function App() {
         <Statistics
           text={'Bad'} value={bad}
         />
+        <Statistics
+          text={'all'} value={total}
+        />
+        <Statistics 
+          text={'Average'} value={calculateAverageComments()}
+        />
+        <Statistics 
+          text={'Positive'} value={commentsPositive + '%'}
+        />
+        
       </div>
     </div>
   )
