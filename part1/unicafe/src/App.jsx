@@ -10,13 +10,28 @@ const Button = ({ handleClick, text }) => {
 }
 
 const Statistics = ({ text, value }) => {
-
   return (
     <div>
       <p>{text}: {value}</p>
     </div>
   )
 }
+
+const StatisticsDisplay = ({ good, neutral, bad, total, commentsPositive }) => {
+  const averageCommets = (good - bad) / total || 0
+
+  return (
+    <div>
+      <Statistics text={'Good'} value={good} />
+      <Statistics text={'Neutral'} value={neutral} />
+      <Statistics text={'Bad'} value={bad} />
+      <Statistics text={'all'} value={total} />
+      <Statistics text={'Average'} value={averageCommets} />
+      <Statistics text={'Positive'} value={commentsPositive + '%'} />
+    </div>
+  )
+}
+
 
 function App() {
   const [good, setGood] = useState(0)
@@ -45,9 +60,7 @@ function App() {
     console.log('bad..', bad)
     setTotal(total + 1)
   }
-  const calculateAverageComments = () => {
-    return ((good - bad) / total) || 0
-  }
+
   const commentsPositive = (good / total) * 100 || 0
 
 
@@ -61,25 +74,13 @@ function App() {
       </div>
       <div>
         <Title text={'Statistics'} />
-        <Statistics
-          text={'Good'} value={good}
+        <StatisticsDisplay
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={total}
+          commentsPositive={commentsPositive}
         />
-        <Statistics
-          text={'Neutral'} value={neutral}
-        />
-        <Statistics
-          text={'Bad'} value={bad}
-        />
-        <Statistics
-          text={'all'} value={total}
-        />
-        <Statistics 
-          text={'Average'} value={calculateAverageComments()}
-        />
-        <Statistics 
-          text={'Positive'} value={commentsPositive + '%'}
-        />
-        
       </div>
     </div>
   )
