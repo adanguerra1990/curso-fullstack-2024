@@ -20,16 +20,22 @@ const Statistics = ({ text, value }) => {
 const StatisticsDisplay = ({ good, neutral, bad, total, commentsPositive }) => {
   const averageCommets = (good - bad) / total || 0
 
-  return (
-    <div>
-      <Statistics text={'Good'} value={good} />
-      <Statistics text={'Neutral'} value={neutral} />
-      <Statistics text={'Bad'} value={bad} />
-      <Statistics text={'all'} value={total} />
-      <Statistics text={'Average'} value={averageCommets} />
-      <Statistics text={'Positive'} value={commentsPositive + '%'} />
-    </div>
-  )
+  if (total > 0) {
+    return (
+      <div>
+        <Statistics text={'Good'} value={good} />
+        <Statistics text={'Neutral'} value={neutral} />
+        <Statistics text={'Bad'} value={bad} />
+        <Statistics text={'all'} value={total} />
+        <Statistics text={'Average'} value={averageCommets} />
+        <Statistics text={'Positive'} value={commentsPositive + '%'} />
+      </div>
+    )
+  } else {
+    return <p>No Feedback Given</p>
+  }
+
+  
 }
 
 
