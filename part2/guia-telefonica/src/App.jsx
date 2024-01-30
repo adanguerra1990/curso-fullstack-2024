@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
-import Person from './components/Person'
+import Filter from './components/Filter'
+import Form from './components/Form'
+import Persons from './components/Persons'
 
 
 function App() {
@@ -52,31 +54,18 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        Filter shown with<input onChange={handleSearhPerson} />
-      </div>
+      <Filter handleSearhPerson={handleSearhPerson} />
       <h2>Add a new</h2>
-      <form onSubmit={addPerson}>      
-        <div>
-          Name: <input onChange={handlePersonChange} value={newName} />
-          <br/>
-          Number: <input onChange={handleNumberChange} value={newNumber} />
-        </div>
-        <div>
-          <button type='submit'>Add</button>
-        </div>
-      </form>
+      <Form
+        handleSubmit={addPerson}
+        handleChangePerson={handlePersonChange} newName={newName}
+        handleChangeNumber={handleNumberChange} newNumber={newNumber}
+      />
       <h2>Numbers</h2>
-      <div>
-        {persons.filter(person => person.name.toLowerCase().includes(searchPerson.toLowerCase())).map(person => {
-          return (
-            <Person
-              key={person.id}
-              persons={person.name}
-              number={person.number}
-            />)
-        })}        
-      </div>
+      <Persons
+        persons={persons}
+        searchPerson={searchPerson}
+      />
     </div>
   )
 }
