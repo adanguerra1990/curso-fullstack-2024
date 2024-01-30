@@ -10,12 +10,19 @@ function App() {
   console.log('personEstate..', persons)
   const [newName, setNewName] = useState('')
 
+  // el método some de JavaScript, que devuelve true si al menos un elemento del array cumple con la condición proporcionada.
+  const nameExists = (name) => persons.some(person => person.name === name)
+
   const addPerson = (event) => {
     event.preventDefault()
     const newObjectPerson = {
       name: newName
     }
     console.log('Click addPerson..', newObjectPerson)
+
+    if (nameExists(newObjectPerson.name)) {
+      alert(`${newObjectPerson.name} is already added to phonebook`)
+    }
 
     setPersons(persons.concat(newObjectPerson))
     setNewName('')
