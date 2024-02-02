@@ -1,10 +1,10 @@
 import React from 'react';
 import Person from './Person';
 
-const Persons = ({persons, searchPerson}) => {
+const Persons = ({filterPerson}) => {
     return (
         <div>
-            {persons.filter(person => person.name.toLowerCase().includes(searchPerson.toLowerCase())).map(person => {
+            {filterPerson.map(person => {
                 return (
                     <Person
                         key={person.id}
