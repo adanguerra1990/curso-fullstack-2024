@@ -40,15 +40,14 @@ function App() {
       .post('http://localhost:3001/persons', newObjectPerson)
       .then(response => {
         console.log('responsePOSt.', response.data)
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
       })
 
     if (nameExists(newObjectPerson.name)) {
       alert(`${newObjectPerson.name} is already added to phonebook`)
     }
-
-    setPersons(persons.concat(newObjectPerson))
-    setNewName('')
-    setNewNumber('')
   }
 
   const handlePersonChange = (event) => {
