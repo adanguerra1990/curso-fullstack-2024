@@ -4,9 +4,6 @@ import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import personServices from './services/person'
-import axios from 'axios'
-import person from './services/person'
-
 
 function App() {
   const [persons, setPersons] = useState([])
@@ -38,32 +35,38 @@ function App() {
     }
     console.log('Click addPerson..', newObjectPerson)
 
-    personServices
-      .create(newObjectPerson)
-      .then(returnedPerson => {
-        console.log('responsePOSt.', returnedPerson)
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
-
     if (nameExists(newObjectPerson.name)) {
-      alert(`${newObjectPerson.name} is already added to phonebook`)
+      const personToUpdate = persons.find(person => person.name === newObjectPerson.name)
+      if (window.confirm(`${newObjectPerson.name} is already added to phonebook, replace the old number with a new one`)) {
+        personServices
+          .update(personToUpdate.id, newObjectPerson)
+          .then(updatePerson => {
+            setPersons(persons.map(person => person.id !== updatePerson.id ? person : updatePerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
+      personServices
+        .create(newObjectPerson)
+        .then(returnedPerson => {
+          console.log('responsePOSt.', returnedPerson)
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
-  const handlePersonChange = (event) => {
-    console.log(event.target.value)
+  const handlePersonChange = (event) => {    
     setNewName(event.target.value)
 
   }
-  const handleNumberChange = (event) => {
-    console.log(event.target.value)
+  const handleNumberChange = (event) => {    
     setNewNumber(event.target.value)
   }
-
-  const handleSearhPerson = (event) => {
-    console.log(event.target.value)
+  
+  const handleSearhPerson = (event) => {   
     setSearchPerson(event.target.value)
   }
 
@@ -71,7 +74,7 @@ function App() {
 
   const deletePerson = (id) => {
     const personToDelete = persons.find(p => p.id === id)
-    
+
     if (window.confirm(`Delete ${personToDelete.name}`)) {
       const updatePerson = persons.filter(person => person.id !== id)
       console.log('filterDelete..', updatePerson)
