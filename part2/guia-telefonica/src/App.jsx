@@ -3,7 +3,7 @@ import './App.css'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
-import axios from 'axios'
+import personServices from './services/person'
 
 
 function App() {
@@ -15,11 +15,11 @@ function App() {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promesa-cumplida.', response)
-        setPersons(response.data)
+    personServices
+      .getAll()
+      .then(inicialPerson => {
+        console.log('promesa-cumplida.', inicialPerson)
+        setPersons(inicialPerson)
       })
   }, [])
   console.log('render', persons.length, 'persons')
@@ -36,11 +36,11 @@ function App() {
     }
     console.log('Click addPerson..', newObjectPerson)
 
-    axios
-      .post('http://localhost:3001/persons', newObjectPerson)
-      .then(response => {
-        console.log('responsePOSt.', response.data)
-        setPersons(persons.concat(response.data))
+    personServices
+      .create(newObjectPerson)
+      .then(returnedPerson => {
+        console.log('responsePOSt.', returnedPerson)
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
       })
