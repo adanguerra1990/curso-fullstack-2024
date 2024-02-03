@@ -32,9 +32,15 @@ function App() {
     const newObjectPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      // id: persons.length + 1
     }
     console.log('Click addPerson..', newObjectPerson)
+
+    axios
+      .post('http://localhost:3001/persons', newObjectPerson)
+      .then(response => {
+        console.log('responsePOSt.', response.data)
+      })
 
     if (nameExists(newObjectPerson.name)) {
       alert(`${newObjectPerson.name} is already added to phonebook`)
