@@ -4,6 +4,8 @@ import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import personServices from './services/person'
+import axios from 'axios'
+import person from './services/person'
 
 
 function App() {
@@ -67,6 +69,27 @@ function App() {
 
   const filterPerson = persons.filter(person => person.name.toLowerCase().includes(searchPerson.toLowerCase()))
 
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(p => p.id === id)
+    
+    if (window.confirm(`Delete ${personToDelete.name}`)) {
+      const updatePerson = persons.filter(person => person.id !== id)
+      console.log('filterDelete..', updatePerson)
+      personServices
+        .personDelete(id)
+        .then(returnedDelete => {
+          console.log(returnedDelete)
+          setPersons(updatePerson)
+        })
+        .catch(error => {
+          console.log('error', error)
+          alert(`${personToDelete.name} has been deleted`)
+          console.log('alert...', updatePerson)
+          setPersons(updatePerson)
+        })
+    }
+  }
+
   console.log('filtrado...', filterPerson)
 
   return (
@@ -82,6 +105,7 @@ function App() {
       <h2>Numbers</h2>
       <Persons
         filterPerson={filterPerson}
+        deletePerson={deletePerson}
       />
     </div>
   )
