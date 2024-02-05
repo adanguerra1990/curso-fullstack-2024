@@ -77,7 +77,7 @@ button:focus-visible {
   margin-bottom: 10px;
 }
 
-div .success {
+.success {
   color: green;
 }
 .error {

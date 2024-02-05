@@ -11,9 +11,11 @@ function App() {
   console.log('personEstate..', persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [searchPerson, setSearchPerson] = useState('')
-  const [successNotification, setSuccessNotification] = useState(null)
-  const [errorNotification, setErrorNotification] = useState(null)
+  const [searchPerson, setSearchPerson] = useState('')  
+  const [notification, setNotification] = useState({
+    message: '',
+    type: ''
+   });
 
   useEffect(() => {
     console.log('effect')
@@ -25,6 +27,22 @@ function App() {
       })
   }, [])
   console.log('render', persons.length, 'persons')
+
+  // Función para mostrar una notificación de Success
+  const showSuccessNotification = (message) => {
+    setNotification({ message, type: 'success' });
+    setTimeout(() => {
+       setNotification({ message: '', type: '' });
+    }, 2000);
+   };
+   
+   // Función para mostrar una notificación de error
+   const showErrorNotification = (message) => {
+    setNotification({ message, type: 'error' });
+    setTimeout(() => {
+       setNotification({ message: '', type: '' });
+    }, 2000);
+   };
 
   // el método some de JavaScript, que devuelve true si al menos un elemento del array cumple con la condición proporcionada.
   const nameExists = (name) => persons.some(person => person.name === name)
@@ -56,11 +74,7 @@ function App() {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
-          setSuccessNotification(`Added ${newObjectPerson.name}`)
-          
-          setTimeout(() => {
-            setSuccessNotification(null)
-          }, 2000)
+          showSuccessNotification(`Added ${newObjectPerson.name}`)
         })
     }
   }
@@ -93,10 +107,7 @@ function App() {
         })
         .catch(error => {
           console.log('error', error)
-          setErrorNotification(`Information of ${personToDelete.name} has been removed from server`)
-          setTimeout(() => {
-            setErrorNotification(null)
-          }, 2000);          
+          showErrorNotification(`Information of ${personToDelete.name} has been removed from server`)         
           setPersons(updatePerson)
         })
     }
@@ -107,8 +118,8 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successNotification} type={false}/>
-      <Notification message={errorNotification} type={true}/>
+      <Notification notification={notification} />
+      {/* <Notification message={errorNotification} type={true}/> */}
       <Filter handleSearhPerson={handleSearhPerson} />
       <h2>Add a new</h2>
       <Form
