@@ -1,9 +1,12 @@
-import React from 'react';
 import Country from './Country';
+import CountryDetails from './CountryDetails';
+import WheatherDetails from './WheatherDetails';
 
-const DisplayCountry = ({ searchCountrie }) => {
-    
-    console.log('compoSearch', searchCountrie)    
+const DisplayCountry = ({ searchCountrie, selectedCountry, onCountrySelect, weatherData }) => {
+    const handleShow = (country) => {
+        console.log('onClick', country)
+        onCountrySelect(country)
+    }
 
     if (searchCountrie.length > 10) {
         return (
@@ -14,30 +17,26 @@ const DisplayCountry = ({ searchCountrie }) => {
     if (searchCountrie.length === 1) {
         const country = searchCountrie[0]
         console.log('condi..', country)
+        console.log('condi..w', weatherData)
+        
         return (
             <div>
-                <h1>{country.name.common}</h1>
-                <img src={country.flags.png} alt='flag' />
-                <p>Capital: {country.capital[0]}</p>
-                <p>Area: {country.area} km²</p>
-                <p>Idiomas: </p>
-                <ul>
-                    {Object.values(country.languages).map((language, index) => (
-                        <li key={index}>{language}</li>
-                    ))}
-                </ul>
+                <CountryDetails country={country} />
+                <WheatherDetails weatherData={weatherData} />
             </div>
         )
     }
 
     return (
         <div>
+            <CountryDetails country={selectedCountry} />
+            <WheatherDetails weatherData={weatherData} />
             {searchCountrie.map(country => (
-                <Country 
-                    key={country.id}
+                <Country
+                    key={country.ccn3}
                     country={country.name.common}
+                    handleShow={() => handleShow(country)}                  
                 />
-                
             ))}
         </div>
     );

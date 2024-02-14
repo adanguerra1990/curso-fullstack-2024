@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-
 import './App.css'
 import axios from 'axios';
 import DisplayCountry from './components/DisplayCountry';
@@ -8,9 +7,10 @@ function App() {
   const [query, setQuery] = useState('')
   const [countries, setCountries] = useState([])
   const [searchCountrie, setSearchCountrie] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null)  
+  const [weatherData, setWeatherData] = useState(null)
 
-  console.log('consulta..', query)
-  console.log('searchCountrie..', searchCountrie)
+  const apiKey = import.meta.env.VITE_API_KEY
 
   useEffect(() => {
     axios
@@ -18,20 +18,51 @@ function App() {
       .then(response => {
         console.log('promesa', response.data)
         setCountries(response.data)
+        
       })
   }, []);
 
+  useEffect(() => {
+    if (selectedCountry) {
+      axios
+      .get(`http://api.openweathermap.org/data/2.5/weather?q=${selectedCountry.name.common}&appid=${apiKey}`)
+      .then(response => {
+        console.log('response..',response.data)
+        setWeatherData(response.data)
+      })
+      .catch(error => {
+        console.log('error de respuesta..', error)
+      })
+    }    
+  }, [selectedCountry, apiKey])
+
+  useEffect(() => {
+    if (searchCountrie.length === 1) {
+      const country = searchCountrie[0];
+      setSelectedCountry(country);
+    } else {
+      setSelectedCountry(null);
+      setWeatherData(null);
+    }
+  }, [searchCountrie]);
+
   const handleSearchCountries = event => {
-    const searchValue = event.target.value.toLowerCase()
-    console.log(searchValue)
+    const searchValue = event.target.value.toLowerCase()    
     setQuery(searchValue)
 
     const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchValue))
-
-    console.log('filtrado..', filteredCountries)
-
+    
     setSearchCountrie(filteredCountries)
+
+    if(filteredCountries.length === 1) {
+      setSelectedCountry(filteredCountries[0])
+    }
   }
+
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country);
+  }
+
 
   return (
     <div>
@@ -39,7 +70,10 @@ function App() {
       <input onChange={handleSearchCountries} value={query} />
 
       <DisplayCountry
-        searchCountrie={searchCountrie}        
+        searchCountrie={searchCountrie}
+        selectedCountry={selectedCountry}
+        onCountrySelect={handleCountrySelect}
+        weatherData={weatherData}
       />
 
     </div>
