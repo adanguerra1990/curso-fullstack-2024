@@ -119,7 +119,6 @@ function App() {
     <div>
       <h2>Phonebook</h2>
       <Notification notification={notification} />
-      {/* <Notification message={errorNotification} type={true}/> */}
       <Filter handleSearhPerson={handleSearhPerson} />
       <h2>Add a new</h2>
       <Form

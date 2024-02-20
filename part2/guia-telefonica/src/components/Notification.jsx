@@ -8,7 +8,7 @@ const Notification = ({ notification }) => {
     const styleClass = notification.type === 'success' ? 'success' : 'error';
 
     return (
-        <div className={`notification ${styleClass}`}>
+        <div className={styleClass}>
             {notification.message}
         </div>
     );
